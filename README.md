@@ -1,2 +1,2 @@
-# otus_learning
+# otuslearning
 learning repository
