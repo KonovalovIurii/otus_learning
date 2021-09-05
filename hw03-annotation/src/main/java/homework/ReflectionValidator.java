@@ -38,18 +38,19 @@ public class ReflectionValidator {
                         // Если не упали до этого момента значит все Before выполнились успешно
                         // Запустим Test
                         exMethod(testClazz, method);
-                        // Запустим After
-                        for (Method methodAfter : methodsAfter) {
-                            exMethod(testClazz, methodAfter);
-                        }
                         pass++;
-
-
                     } catch (Exception e) {
                         for (Method methodAfter : methodsAfter) {
                             exMethod(testClazz, methodAfter);
                         }
                         fail++;
+                    }
+                    finally {
+                        // Запустим After
+                        for (Method methodAfter : methodsAfter) {
+                            exMethod(testClazz, methodAfter);
+                        }
+
                     }
                 } catch (Exception e) {
                   e.printStackTrace();
