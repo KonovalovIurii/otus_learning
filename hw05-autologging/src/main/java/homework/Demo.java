@@ -1,7 +1,8 @@
 package homework;
 
 class Demo {
-    public void action() {
-        new TestLogging().calculation(6);
+    public static void main(String[] args) {
+        TestLoggingInterface myTestClass = Ioc.createmyTestClass();
+        myTestClass.calculation(6, "строка ");
     }
 }
