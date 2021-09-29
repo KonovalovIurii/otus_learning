@@ -3,6 +3,7 @@ package homework;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 
 class Ioc {
 
@@ -18,14 +19,21 @@ class Ioc {
     static class DemoInvocationHandler implements InvocationHandler {
         private final TestLoggingInterface myTestClass;
 
+        private final Method [] MethodList;
+
         DemoInvocationHandler(TestLoggingInterface myTestClass) {
             this.myTestClass = myTestClass;
+
+            this.MethodList = Arrays.stream(TestLogging.class.getMethods())
+                    .filter(method -> method.isAnnotationPresent(Log.class))
+                    .toArray(Method[]::new);
+
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             String argList = "";
-            if (method.isAnnotationPresent(Log.class)) {
+            if (Arrays.stream(MethodList).map(c -> c.getName()).anyMatch(method.getName()::equals)) {
                 for (Object arg : args) {
                     if (arg.getClass() == Object[].class) {
                         for (Object intArg : (Object[]) arg) {
