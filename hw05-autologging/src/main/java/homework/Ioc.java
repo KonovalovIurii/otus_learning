@@ -1,9 +1,11 @@
 package homework;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.Arrays;
+
+
+import java.lang.reflect.*;
+import java.util.*;
+
+
 
 class Ioc {
 
@@ -19,41 +21,56 @@ class Ioc {
     static class DemoInvocationHandler implements InvocationHandler {
         private final TestLoggingInterface myTestClass;
 
-        private final Method [] MethodList;
+        private final List<Method> MethodList = new ArrayList();
 
         DemoInvocationHandler(TestLoggingInterface myTestClass) {
             this.myTestClass = myTestClass;
-
-            this.MethodList = Arrays.stream(TestLogging.class.getMethods())
-                    .filter(method -> method.isAnnotationPresent(Log.class))
-                    .toArray(Method[]::new);
-
+            for (Method m : TestLogging.class.getMethods()) {
+                if (m.isAnnotationPresent(Log.class)) {
+                    MethodList.add(m);
+                }
+            }
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             String argList = "";
-            if (Arrays.stream(MethodList).map(c -> c.getName()).anyMatch(method.getName()::equals)) {
-                for (Object arg : args) {
-                    if (arg.getClass() == Object[].class) {
-                        for (Object intArg : (Object[]) arg) {
-                            argList = argList + " " + intArg;
-                        }
-                    } else {
-                        argList = argList + " " + arg;
+            List<String> listParamInvoke = new ArrayList();
+            List<String> listParam = new ArrayList();
+            //Узнаем параметры метода
+            for (Parameter p : method.getParameters()) {
+                listParamInvoke.add(p.getType().toString());
+            }
+            for (Method m : MethodList) {
+                if (m.getName().equals(method.getName())) {
+                    //Совпали по имени, далее проверим совпадения по параметрам методов
+                    for (Parameter p : m.getParameters()) {
+                        listParam.add(p.getType().toString());
                     }
+                    if (listParamInvoke.equals(listParam)) {
+                        for (Object arg : args) {
+                            if (arg.getClass() == Object[].class) {
+                                for (Object intArg : (Object[]) arg) {
+                                    argList = argList + " " + intArg;
+                                }
+                            } else {
+                                argList = argList + " " + arg;
+                            }
+                        }
+                    }
+                    listParam.clear();
                 }
 
             }
             System.out.println("executed method:" + method.getName() + ", param: " + argList);
-            return method.invoke(myTestClass,args);
-    }
+            return method.invoke(myTestClass, args);
+        }
 
-    @Override
-    public String toString() {
-        return "DemoInvocationHandler{" +
-                "myClass=" + myTestClass +
-                '}';
+        @Override
+        public String toString() {
+            return "DemoInvocationHandler{" +
+                    "myClass=" + myTestClass +
+                    '}';
+        }
     }
-}
 }
