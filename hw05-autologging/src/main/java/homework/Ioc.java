@@ -1,10 +1,8 @@
 package homework;
 
 
-
 import java.lang.reflect.*;
 import java.util.*;
-
 
 
 class Ioc {
@@ -20,14 +18,13 @@ class Ioc {
 
     static class DemoInvocationHandler implements InvocationHandler {
         private final TestLoggingInterface myTestClass;
-
-        private final List<Method> MethodList = new ArrayList();
+        private final List<String> ListMethodParams = new ArrayList();
 
         DemoInvocationHandler(TestLoggingInterface myTestClass) {
             this.myTestClass = myTestClass;
             for (Method m : TestLogging.class.getMethods()) {
                 if (m.isAnnotationPresent(Log.class)) {
-                    MethodList.add(m);
+                    ListMethodParams.add(getParamList(m));
                 }
             }
         }
@@ -35,35 +32,29 @@ class Ioc {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             String argList = "";
-            List<String> listParamInvoke = new ArrayList();
-            List<String> listParam = new ArrayList();
-            //Узнаем параметры метода
-            for (Parameter p : method.getParameters()) {
-                listParamInvoke.add(p.getType().toString());
-            }
-            for (Method m : MethodList) {
-                if (m.getName().equals(method.getName())) {
-                    //Совпали по имени, далее проверим совпадения по параметрам методов
-                    for (Parameter p : m.getParameters()) {
-                        listParam.add(p.getType().toString());
-                    }
-                    if (listParamInvoke.equals(listParam)) {
-                        for (Object arg : args) {
-                            if (arg.getClass() == Object[].class) {
-                                for (Object intArg : (Object[]) arg) {
-                                    argList = argList + " " + intArg;
-                                }
-                            } else {
-                                argList = argList + " " + arg;
-                            }
+            String listParamInvoke = getParamList(method);
+            if (ListMethodParams.stream().anyMatch(listParamInvoke::equals)) {
+                for (Object arg : args) {
+                    if (arg.getClass() == Object[].class) {
+                        for (Object intArg : (Object[]) arg) {
+                            argList = argList + " " + intArg;
                         }
+                    } else {
+                        argList = argList + " " + arg;
                     }
-                    listParam.clear();
                 }
-
+                System.out.println("executed method:" + method.getName() + ", param: " + argList);
             }
-            System.out.println("executed method:" + method.getName() + ", param: " + argList);
             return method.invoke(myTestClass, args);
+        }
+
+        public String getParamList(Method method) {
+            String str = new String();
+            str = method.getName();
+            for (Parameter p : method.getParameters()) {
+                str = str + "_"+ p.getType().toString();
+            }
+            return str;
         }
 
         @Override
