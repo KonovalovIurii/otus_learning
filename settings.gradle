@@ -4,4 +4,5 @@ include 'hw02-generics'
 include 'hw03-annotation'
 include 'homework'
 include 'hw04-gc'
+include 'hw05-autologging'
 
