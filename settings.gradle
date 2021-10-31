@@ -5,4 +5,6 @@ include 'hw03-annotation'
 include 'homework'
 include 'hw04-gc'
 include 'hw05-autologging'
+include 'hw07-structuralPattern'
+
 
