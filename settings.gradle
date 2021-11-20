@@ -8,6 +8,8 @@ include 'hw05-autologging'
 include 'hw07-structuralPattern'
 include 'hw06-bankomat'
 include 'hw08-io'
+include 'hw09-jdbc:demo'
+include 'hw09-jdbc:homework'
 
 
 
