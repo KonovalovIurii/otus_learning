@@ -1,5 +1,7 @@
 package homework.jdbc.mapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.otus.core.repository.DataTemplate;
 import ru.otus.core.repository.executor.DbExecutor;
 
@@ -16,15 +18,26 @@ import java.util.Optional;
  * Сохратяет объект в базу, читает объект из базы
  */
 public class DataTemplateJdbc<T> implements DataTemplate<T> {
+    private static final Logger logger = LoggerFactory.getLogger(DataTemplateJdbc.class);
 
     private final DbExecutor dbExecutor;
     private final EntitySQLMetaData entitySQLMetaData;
     private final EntityClassMetaData<T> entityClassMetaData;
 
+
     public DataTemplateJdbc(DbExecutor dbExecutor, EntitySQLMetaData entitySQLMetaData, EntityClassMetaData entityClassMetaData) {
         this.dbExecutor = dbExecutor;
         this.entitySQLMetaData = entitySQLMetaData;
         this.entityClassMetaData = entityClassMetaData;
+        new DataTemplateJdbc(dbExecutor, entitySQLMetaData , entityClassMetaData ).log();
+    }
+
+    private void log() {
+        try {
+            throw new RuntimeException("exception for log");
+        } catch (Exception e) {
+            logger.error("exception log:", e);
+        }
     }
 
     @Override
@@ -48,7 +61,8 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
                 }
                 return null;
             } catch (SQLException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                e.printStackTrace();
+                logger.error("exception log:", e);
+                //e.printStackTrace();
                 throw new RuntimeException(e);
             }
         });
@@ -75,7 +89,9 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
                 }
                 return clientList;
             } catch (SQLException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                e.printStackTrace();
+                logger.error("exception log:", e);
+                // e.printStackTrace();
+
                 throw new RuntimeException(e);
             }
         }).orElseThrow(() -> new RuntimeException("Unexpected error"));
@@ -95,7 +111,8 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
                 params.add(field.get(client));
             }
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            logger.error("exception log:", e);
+           // e.printStackTrace();
             throw new RuntimeException(e);
         }
         return dbExecutor.executeStatement(connection, entitySQLMetaData.getInsertSql(), params);
@@ -121,7 +138,9 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
             // ID добавляем последним параметром
             params.add(fieldId.get(client));
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            logger.error("exception log:", e);
+           // e.printStackTrace();
+
             throw new RuntimeException(e);
         }
         dbExecutor.executeStatement(connection, entitySQLMetaData.getUpdateSql(), params);
