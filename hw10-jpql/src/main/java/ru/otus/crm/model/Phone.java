@@ -5,7 +5,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "phone")
-public class Phone {
+public class Phone implements Cloneable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -15,7 +15,7 @@ public class Phone {
     @Column (name = "number")
     private String number;
 
-    @ManyToOne (fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Client.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
 

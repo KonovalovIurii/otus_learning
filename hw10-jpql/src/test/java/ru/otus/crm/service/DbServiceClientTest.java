@@ -3,7 +3,7 @@ package ru.otus.crm.service;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.base.AbstractHibernateTest;
-import ru.otus.crm.model.Client;
+import ru.otus.crm.model.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

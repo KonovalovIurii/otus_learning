@@ -1,6 +1,5 @@
 package ru.otus.crm.model;
 
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +16,7 @@ public class Client implements Cloneable {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToOne(targetEntity = Address.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
 
@@ -44,7 +43,12 @@ public class Client implements Cloneable {
         this.address = address;
         this.phones = phones;
     }
-
+    public Client(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    /*   this.address = null;
+        this.phones = null;*/
+    }
 
     public Client(Long id, String name, Address address) {
         this.id = id;
@@ -57,22 +61,15 @@ public class Client implements Cloneable {
         this.name = name;
         this.address = address;
         this.phones = phones;
-    }
+   }
 
-    public Client(Long id, String name) {
-        this.id = id;
-        this.name = name;
-        this.address = null;
-        this.phones = null;
-    }
 
     @Override
     public Client clone() {
         // новый экземпляр-копия
         Client clientCopy = new Client(this.id, this.name, this.address);
-        // Склонируем phones, вызвав метод добавления
+        // Склонируем phones
         this.phones.forEach(phone -> clientCopy.addPhone(new Phone(phone.getNumber())));
-        //return new Client(this.id, this.name, this.adress, this.phones);
         return clientCopy;
     }
 
@@ -92,12 +89,12 @@ public class Client implements Cloneable {
         this.name = name;
     }
 
-    public Address getAdress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAdress(Address adress) {
-        this.address = adress;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public Set<Phone> getPhones() {
@@ -119,7 +116,7 @@ public class Client implements Cloneable {
         return "Client{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", adress='" + address + '\'' +
+                ", address='" + address + '\'' +
                 ", phones='" + phones + '\'' +
                 '}';
     }

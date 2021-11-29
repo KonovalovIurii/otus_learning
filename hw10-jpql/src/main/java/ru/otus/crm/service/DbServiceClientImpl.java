@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.core.repository.DataTemplate;
 import ru.otus.crm.model.Client;
+import ru.otus.crm.model.Address;
+import ru.otus.crm.model.Phone;
 import ru.otus.core.sessionmanager.TransactionManager;
 
 import java.util.List;
