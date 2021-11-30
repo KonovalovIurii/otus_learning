@@ -19,7 +19,7 @@ public class TransactionManagerHibernate implements TransactionManager {
                 var transaction = session.beginTransaction();
                 try {
                     var result = action.apply(session);
-                    transaction.commit();
+                    //transaction.commit();
                     return result;
                 } catch (Exception ex) {
                     transaction.rollback();
