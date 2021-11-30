@@ -3,10 +3,8 @@ package ru.otus.crm.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.core.repository.DataTemplate;
-import ru.otus.crm.model.Client;
-import ru.otus.crm.model.Address;
-import ru.otus.crm.model.Phone;
 import ru.otus.core.sessionmanager.TransactionManager;
+import ru.otus.crm.model.Client;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,10 +27,12 @@ public class DbServiceClientImpl implements DBServiceClient {
             if (client.getId() == null) {
                 clientDataTemplate.insert(session, clientCloned);
                 log.info("created client: {}", clientCloned);
+                session.flush();
                 return clientCloned;
             }
             clientDataTemplate.update(session, clientCloned);
             log.info("updated client: {}", clientCloned);
+            session.flush();
             return clientCloned;
         });
     }

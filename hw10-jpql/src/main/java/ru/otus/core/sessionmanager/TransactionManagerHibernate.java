@@ -1,5 +1,6 @@
 package ru.otus.core.sessionmanager;
 
+import org.hibernate.FlushMode;
 import org.hibernate.SessionFactory;
 import java.util.concurrent.Callable;
 
@@ -14,6 +15,7 @@ public class TransactionManagerHibernate implements TransactionManager {
     public <T> T doInTransaction(TransactionAction<T> action) {
         return wrapException(() -> {
             try (var session = sessionFactory.openSession()) {
+                session.setHibernateFlushMode(FlushMode.MANUAL);
                 var transaction = session.beginTransaction();
                 try {
                     var result = action.apply(session);
