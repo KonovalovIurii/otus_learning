@@ -27,19 +27,17 @@ public class DbServiceClientImpl implements DBServiceClient {
             if (client.getId() == null) {
                 clientDataTemplate.insert(session, clientCloned);
                 log.info("created client: {}", clientCloned);
-                session.flush();
                 return clientCloned;
             }
             clientDataTemplate.update(session, clientCloned);
             log.info("updated client: {}", clientCloned);
-            session.flush();
             return clientCloned;
         });
     }
 
     @Override
     public Optional<Client> getClient(long id) {
-        return transactionManager.doInTransaction(session -> {
+        return transactionManager.doInTransactionReadonly(session -> {
             var clientOptional = clientDataTemplate.findById(session, id);
             log.info("client: {}", clientOptional);
             return clientOptional;
@@ -48,7 +46,7 @@ public class DbServiceClientImpl implements DBServiceClient {
 
     @Override
     public List<Client> findAll() {
-        return transactionManager.doInTransaction(session -> {
+        return transactionManager.doInTransactionReadonly(session -> {
             var clientList = clientDataTemplate.findAll(session);
             log.info("clientList:{}", clientList);
             return clientList;
