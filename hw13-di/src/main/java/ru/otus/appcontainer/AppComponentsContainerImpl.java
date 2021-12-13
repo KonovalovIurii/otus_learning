@@ -31,10 +31,11 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
                 AppComponent appComponent = method.getAnnotation(AppComponent.class);
                 if (appComponent == null) {
-                    throw new RuntimeException("Метод " + appComponent.name() + "не имеет аннотации");
+                    throw new RuntimeException("Метод " + method.getName() + "не имеет аннотации");
                 }
                 // проверим есть ли перегрузка
-                if (getAppComponent(appComponent.name()) != null) {
+                if (appComponentsByName.get(appComponent.name()) != null){
+                //if (getAppComponent(appComponent.name()) != null) {
                     throw new RuntimeException("Метод " + appComponent.name() + "имеет перегрузку");
                 }
                 // экземпляр класса
@@ -54,12 +55,10 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     public Object makeObj(Object object, Method method) {
         try {
             method.setAccessible(true);
-            Parameter[] params = method.getParameters();
+            Class<?>[] params = method.getParameterTypes();
             Object[] paramList = new Object[params.length];
-            int i = 0;
-            for (Parameter param : params) {
-                paramList[i] = getAppComponent(param.getType());
-                i++;
+            for (int i = 0; i < params.length; i++){
+                paramList[i] = getAppComponent(params[i]);
             }
             return method.invoke(object,paramList);
         } catch (Exception e) {
@@ -75,9 +74,13 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
     @Override
     public <C> C getAppComponent(Class<C> componentClass) {
-        return (C) appComponents.stream().filter(p ->
-                componentClass.isAssignableFrom(p.getClass())
-        ).findFirst().get();
+      try {
+          return (C) appComponents.stream().filter(p ->
+                  componentClass.isAssignableFrom(p.getClass())
+          ).findFirst().get();
+      }catch (NullPointerException ex){
+          return null;
+      }
     }
 
     @Override
