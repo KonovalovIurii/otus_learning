@@ -1,0 +1,35 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Клиенты</title>
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+
+</head>
+</head>
+
+<body onload="connect();">
+<h4>Добавить клиента</h4>
+
+    <table border="1">
+        <tr>
+            <td style="width: 150px">Имя</td>
+            <td style="width: 100px">Адрес</td>
+            <td style="width: 100px">Телефоны</td>
+        </tr>
+        <tr>
+            <td style="width: 50px"><input type="text" name="name" id = "name" value="" placeholder="Введите имя клиента"></td>
+            <td style="width: 100px"><input type="text" name="address" id = "address" value="" placeholder="Введите адрес клиента"></td>
+            <td style="width: 100px"><input type="text" name="phone" id = "phone" value="" placeholder="Введите телефон клиента"></td>
+        </tr>
+    </table>
+    <br/><br/>
+    <button id="send" class="btn btn-default" type="submit">Добавить</button>
+
+
+<h4>Список клиентов</h4>
+<div class="content" id="content"></div>
+<script src="/app.js"></script>
+
+</body>
+</html>
