@@ -10,7 +10,7 @@ include 'hw06-bankomat'
 include 'hw08-io'
 include 'hw09-jdbc:demo'
 include 'hw09-jdbc:homework'
-include 'trygretty'
+include 'hw17-gRPC'
 
 
 
