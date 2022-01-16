@@ -1,3 +1,4 @@
+/*
 package ru.ws.Homework.db.controllers;
 
 import org.springframework.ui.Model;
@@ -38,4 +39,4 @@ public class ClientController {
         return new RedirectView("/", true);
     }
 
-}
+}*/

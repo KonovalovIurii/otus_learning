@@ -1,4 +1,4 @@
-package ru.ws.Homework;
+package ru.ws.Homework.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

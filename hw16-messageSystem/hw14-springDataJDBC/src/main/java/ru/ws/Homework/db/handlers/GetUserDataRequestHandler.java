@@ -2,6 +2,7 @@ package ru.ws.Homework.db.handlers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import ru.otus.messagesystem.RequestHandler;
 import ru.otus.messagesystem.client.ResultDataType;
 import ru.otus.messagesystem.message.Message;

@@ -7,7 +7,6 @@ import ru.otus.messagesystem.message.Message;
 import ru.otus.messagesystem.message.MessageBuilder;
 import ru.otus.messagesystem.MessageSystem;
 import ru.otus.messagesystem.message.MessageType;
-
 import java.util.Objects;
 
 public class MsClientImpl implements MsClient {

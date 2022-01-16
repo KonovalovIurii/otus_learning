@@ -1,5 +1,8 @@
 package ru.ws.Homework;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Message {
     private String messageStr;
 
