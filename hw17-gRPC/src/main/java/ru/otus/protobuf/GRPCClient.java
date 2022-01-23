@@ -22,8 +22,6 @@ public class GRPCClient {
     private static final long FIN_NUMBER = 30L;
 
 
-
-
     public static void main(String[] args) throws InterruptedException {
 
         ManagedChannel channel = ManagedChannelBuilder.forAddress(SERVER_HOST, SERVER_PORT)
@@ -36,15 +34,17 @@ public class GRPCClient {
         long currentValue = 0L;
         long prevServerValue = 0L;
         final long[] serverValue = {0L};
-       // Date date = new Date();
+        // Date date = new Date();
 
         newStub.startCount(UserMessage.newBuilder().setStartNum(START_NUMBER).setFinNum(FIN_NUMBER).build(),
                 new StreamObserver<UserMessage>() {
                     @Override
                     public void onNext(UserMessage um) {
-                      //  System.out.println(date.toString() + Thread.currentThread().getName() +" Сервер вернул число:"+ um.getCountNum());
-                        logger.info("Сервер вернул число: {} ", um.getCountNum());
-                        serverValue[0] = um.getCountNum();
+                        synchronized (serverValue) {
+                            //  System.out.println(date.toString() + Thread.currentThread().getName() +" Сервер вернул число:"+ um.getCountNum());
+                            logger.info("Сервер вернул число: {} ", um.getCountNum());
+                            serverValue[0] = um.getCountNum();
+                        }
                     }
 
                     @Override
@@ -67,18 +67,20 @@ public class GRPCClient {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (prevServerValue == serverValue[0]) {
-                    currentValue++;
-                    //System.out.println(date.toString() + Thread.currentThread().getName() + " currentValue: {} "+ currentValue);
-                     logger.info("currentValue: {} ", currentValue);
+                synchronized (serverValue) {
+                    if (prevServerValue == serverValue[0]) {
+                        currentValue++;
+                        //System.out.println(date.toString() + Thread.currentThread().getName() + " currentValue: {} "+ currentValue);
+                        logger.info("currentValue: {} ", currentValue);
 
-                } else {
-                    currentValue = currentValue + serverValue[0] + 1;
-                  //  System.out.println(date.toString() + Thread.currentThread().getName() + " currentValue: {} "+ currentValue);
-                     logger.info("currentValue: {} ", currentValue);
+                    } else {
+                        currentValue = currentValue + serverValue[0] + 1;
+                        //  System.out.println(date.toString() + Thread.currentThread().getName() + " currentValue: {} "+ currentValue);
+                        logger.info("currentValue: {} ", currentValue);
 
-                    prevServerValue = serverValue[0];
+                        prevServerValue = serverValue[0];
 
+                    }
                 }
             }
         } catch (Exception e) {
