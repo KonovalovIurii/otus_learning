@@ -4,7 +4,7 @@ const connect = () => {
     stompClient = Stomp.over(new SockJS('/gs-guide-websocket'));
     stompClient.connect({}, (frame) => {
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/response', (message) => showClient(JSON.parse(message.body)));
+        stompClient.subscribe('/topic/response', (message) => addClient(JSON.parse(message.body)));
     });
 }
 
@@ -14,7 +14,21 @@ const sendMsg = () => stompClient.send("/app/message", {}, JSON.stringify({
     'phone': $("#phone").val()
 }))
 
+const addClient = (client) => {
+    var phoneList = "";
+    client.phones.forEach(function(elem, index) {
+                          	phoneList = phoneList + elem.number + " <br> ";
+    });
+    $("#clientsList").append(
+        "<tr>"+
+            "<td>" + client.id + "</td>" +
+            "<td>" + client.name + "</td>" +
+            "<td>" + client.address.street + "</td>" +
+            "<td>" + phoneList + "</td>" +
+        "</tr>");
+}
 
+/*
 const showClient = (message) => {
     document.querySelector('.content').innerHTML = `<table class="client" border = 2></table>`
     let row = document.createElement('tr')
@@ -30,6 +44,7 @@ const showClient = (message) => {
         document.querySelector('.client').appendChild(row)
     }
 }
+*/
 
 $(function () {
     $("form").on('submit', (event) => {

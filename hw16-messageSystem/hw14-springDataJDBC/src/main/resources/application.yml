@@ -17,5 +17,5 @@ server:
 frontService:
   name: frontendService
 
-databaseService:
+dbService:
   name: databaseService

@@ -2,24 +2,21 @@ package ru.ws.Homework.db.handlers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import ru.otus.messagesystem.RequestHandler;
 import ru.otus.messagesystem.client.ResultDataType;
 import ru.otus.messagesystem.message.Message;
 import ru.otus.messagesystem.message.MessageBuilder;
-import ru.ws.Homework.controllers.MessageController;
-import ru.ws.Homework.db.crm.model.Client;
 import ru.ws.Homework.db.crm.service.DBServiceClient;
 import ru.ws.Homework.dto.UserData;
 
 import java.util.Optional;
 
 
-public class GetUserDataRequestHandler implements RequestHandler {
-    private static final Logger logger = LoggerFactory.getLogger(GetUserDataRequestHandler.class);
+public class GetClientDataRequestHandler implements RequestHandler {
+    private static final Logger logger = LoggerFactory.getLogger(GetClientDataRequestHandler.class);
     private final DBServiceClient dbServiceClient;
 
-    public GetUserDataRequestHandler(DBServiceClient dbServiceClient) {
+    public GetClientDataRequestHandler(DBServiceClient dbServiceClient) {
         this.dbServiceClient = dbServiceClient;
     }
 
