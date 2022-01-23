@@ -10,7 +10,8 @@ include 'hw06-bankomat'
 include 'hw08-io'
 include 'hw09-jdbc:demo'
 include 'hw09-jdbc:homework'
-include 'trygretty'
+include 'hw16-messageSystem:hw14-springDataJDBC'
+include 'hw16-messageSystem:MessageSystem'
 
 
 
