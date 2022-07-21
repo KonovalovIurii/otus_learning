@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+   // id 'org.springframework.boot'
+}
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+dependencies {
+    dependencies {
+        implementation 'ch.qos.logback:logback-classic'
+        implementation 'com.google.code.findbugs:jsr305'
+        implementation 'org.springframework.boot:spring-boot-starter-webflux'
+        implementation 'com.google.code.gson:gson:2.7'
+
+       // implementation("com.google.code.gson:gson:${Versions.gson}")
+
+        testImplementation("org.junit.jupiter:junit-jupiter-engine")
+        testImplementation("org.junit.jupiter:junit-jupiter-params")
+        testImplementation("org.assertj:assertj-core")
+
+        implementation 'org.liquibase:liquibase-core:2.0.3'
+        implementation("org.springframework.boot:spring-boot-starter-web")
+        implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+        implementation("org.springframework.boot:spring-boot-starter-test")
+
+    }
+}
+
+test {
+}
